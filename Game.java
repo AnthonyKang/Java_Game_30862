@@ -10,11 +10,10 @@ public class Game extends JFrame {
 // 5) List of monster bullets
 // 6) Game score
 // 7) Sound queues
+// 8) Game status (Running or paused)
 
 	private final static int UNIT = 20;
         private Char mainChar;
-
-
 
 
 
@@ -29,6 +28,7 @@ public class Game extends JFrame {
 // 4) Create sounds
 // 5) Update statuses
 // 6) Redraw
+
 
 
 }
