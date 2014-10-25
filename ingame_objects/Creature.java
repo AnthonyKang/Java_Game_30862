@@ -1,8 +1,8 @@
 public class Char extends Item{
-	private int speed; // in UNITS/sec
+	private int speed; // in px/sec
 	private int health;
 	private int movement_count;
-	private final static int UNIT = 20; // number of px in one unit
+	private final static int UNIT = 20;
 
 	public Char(int xcoord, int ycoord, int speed, int health){
 		this.x_map = xcoord;
@@ -11,15 +11,11 @@ public class Char extends Item{
 		this.health = health;
 	}
 	public int get_xcoord(){
-		return screen_x;
+		return x_coord;
 	}
 	public int get_ycoord(){
-		return screen_y;
+		return y_coord;
 	}
-        public void set_ycoord(int y){    // Used for implementing changes in verticl position after jump upon contact with other blocks
-                this.screen_y = y;
-        }
-
 	public int get_speed(){
 		return speed;
 	}
@@ -32,11 +28,9 @@ public class Char extends Item{
 	public void set_health(int health){
 		this.health = health;
 	}
-
-        // InputHandler will set direction and alert frame class
+	// InputHandler will set direction and alert frame class
 	// Frame will call this to update movements
-	// Updates number of pixels moved
-        public int move_char(long elapsed_time, int leftright){
+	public int move_char(long elapsed_time, int leftright){
 		// calculate displacement
 		int x_displace = this.speed * elapsed_time / 1000;
 		// set x map coor 
@@ -47,15 +41,15 @@ public class Char extends Item{
 
 		// update health
 		this.movement_count += x_displace;
-                this.health += (this.movement_count/UNIT);
-                this.movement_count %= UNIT;
+        this.health += (this.movement_count/UNIT);
+        this.movement_count %= UNIT;
         
-                // return x_displace for screen to update position on map
-                return x_displace;
+        // return x_displace for screen to update position on map
+        return x_displace;
 	}
 	// InputHandler will detect idleness and call inc_health for every second of idle
-	public void update_health(int update) {
-		this.health += update;
+	public void inc_health() {
+		this.health += 5;
 	}
 
 
