@@ -19,12 +19,16 @@ public abstract class Creature extends Sprite {
     public static final int STATE_DYING = 1;
     public static final int STATE_DEAD = 2;
 
+    private static final int MAX_HEALTH = 40;
+
     private Animation left;
     private Animation right;
     private Animation deadLeft;
     private Animation deadRight;
     private int state;
     private long stateTime;
+
+    private int health;
 
     /**
         Creates a new Creature with the specified Animations.
@@ -38,6 +42,18 @@ public abstract class Creature extends Sprite {
         this.deadLeft = deadLeft;
         this.deadRight = deadRight;
         state = STATE_NORMAL;
+
+        health = 20;
+    }
+
+    // Functions to maipulate health
+    public void updateHealth(int update) {
+	this.health += update;
+	if(this.health > MAX_HEALTH) this.health = MAX_HEALTH;
+    }
+
+    public int getHealth() {
+	return this.health;
     }
 
 
