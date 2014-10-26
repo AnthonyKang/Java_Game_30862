@@ -1,14 +1,14 @@
 import java.awt.*;
 import javax.swing.JFrame;
 
-public class Game extends JFrame {
+public class Game {
 // Contains:
 // 1) Player character
 // 2) List of monsters
 // 3) List of in game items
 // 4) List of player bullets
 // 5) List of monster bullets
-// 6) Game score
+// 6) Game score (health)
 // 7) Sound queues
 // 8) Game status (Running or paused)
 
@@ -29,6 +29,11 @@ public class Game extends JFrame {
 // 5) Update statuses
 // 6) Redraw
 
+
+/////////////////////////////////////////
+// Screen Manager Methods
+/////////////////////////////////////////
+        
 
 
 }
