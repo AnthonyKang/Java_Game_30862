@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.JFrame;
 
-public class Game {
+public class Game extends JFrame {
 // Contains:
 // 1) Player character
 // 2) List of monsters
@@ -14,6 +14,28 @@ public class Game {
 
 	private final static int UNIT = 20;
         private Char mainChar;
+
+
+
+// Main Function
+        public static void main(String[] args) {
+                DisplayMode displayMode = new DisplayMode(800, 600, 16, DisplayMode.REFRESH_RATE_UNKNOWN);
+                Game gameCore = new Game();
+                gameCore.run(displayMode);
+        }
+
+        private ScreenManager screen;
+
+        public void run(DisplayMode displayMode) {
+                setBackground(Color.blue);
+                screen = new ScreenManager();
+                try {
+                        screen.setFullScreen(displayMode, this);
+                }
+                finally {
+                        screen.restoreScreen();
+                }
+        }
 
 
 
