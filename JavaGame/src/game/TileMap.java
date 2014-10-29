@@ -18,6 +18,8 @@ public class TileMap {
     private LinkedList sprites;
     private Sprite player;
 
+    private LinkedList bullets;
+
     /**
         Creates a new TileMap with the specified width and
         height (in number of tiles) of the map.
@@ -92,12 +94,19 @@ public class TileMap {
         sprites.add(sprite);
     }
 
+    public void addBullet(Sprite sprite) {
+        bullets.add(sprite);
+    }
 
     /**
         Removes a Sprite object from this map.
     */
     public void removeSprite(Sprite sprite) {
         sprites.remove(sprite);
+    }
+
+    public void removeBullet(Sprite sprite) {
+	bullets.remove(sprite);
     }
 
 
@@ -107,6 +116,10 @@ public class TileMap {
     */
     public Iterator getSprites() {
         return sprites.iterator();
+    }
+
+    public Iterator getBullets() {
+        return bullets.iterator();
     }
 
 }
