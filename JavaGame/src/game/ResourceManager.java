@@ -27,7 +27,6 @@ public class ResourceManager {
     private Sprite coinSprite;
     private Sprite goalSprite;
     private Sprite grubSprite;
-    private Sprite flySprite;
 
     /**
         Creates a new ResourceManager with the specified
@@ -170,9 +169,6 @@ public class ResourceManager {
                 else if (ch == '1') {
                     addSprite(newMap, grubSprite, x, y);
                 }
-                else if (ch == '2') {
-                    addSprite(newMap, flySprite, x, y);
-                }
             }
         }
 
@@ -241,9 +237,6 @@ public class ResourceManager {
             loadImage("player1.png"),
             loadImage("player2.png"),
             loadImage("player3.png"),
-            loadImage("fly1.png"),
-            loadImage("fly2.png"),
-            loadImage("fly3.png"),
             loadImage("grub1.png"),
             loadImage("grub2.png"),
         };
@@ -262,22 +255,17 @@ public class ResourceManager {
 
         // create creature animations
         Animation[] playerAnim = new Animation[4];
-        Animation[] flyAnim = new Animation[4];
         Animation[] grubAnim = new Animation[4];
         for (int i=0; i<4; i++) {
             playerAnim[i] = createPlayerAnim(
                 images[i][0], images[i][1], images[i][2]);
-            flyAnim[i] = createFlyAnim(
-                images[i][3], images[i][4], images[i][5]);
             grubAnim[i] = createGrubAnim(
-                images[i][6], images[i][7]);
+                images[i][3], images[i][4]);
         }
 
         // create creature sprites
         playerSprite = new Player(playerAnim[0], playerAnim[1],
             playerAnim[2], playerAnim[3]);
-        flySprite = new Fly(flyAnim[0], flyAnim[1],
-            flyAnim[2], flyAnim[3]);
         grubSprite = new Grub(grubAnim[0], grubAnim[1],
             grubAnim[2], grubAnim[3]);
     }
@@ -293,18 +281,6 @@ public class ResourceManager {
         anim.addFrame(player2, 150);
         anim.addFrame(player3, 200);
         anim.addFrame(player2, 150);
-        return anim;
-    }
-
-
-    private Animation createFlyAnim(Image img1, Image img2,
-        Image img3)
-    {
-        Animation anim = new Animation();
-        anim.addFrame(img1, 50);
-        anim.addFrame(img2, 50);
-        anim.addFrame(img3, 50);
-        anim.addFrame(img2, 50);
         return anim;
     }
 
