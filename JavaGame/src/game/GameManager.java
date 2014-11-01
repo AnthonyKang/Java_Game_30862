@@ -30,6 +30,7 @@ public class GameManager extends GameCore {
     private static final int DRUM_TRACK = 1;
 
     public static final float GRAVITY = 0.002f;
+    private static final long B_COOLDOWN = 100; // 1 second cooldown between shots
 
     private Point pointCache = new Point();
     private TileMap map;
@@ -47,7 +48,13 @@ public class GameManager extends GameCore {
     private GameAction exit;
     private GameAction fire;
 
+
     private int gameScore;
+
+
+    // Counters for timing and counting related functions
+    private long bTiming;
+
 
     public void init() {
         super.init();
@@ -81,6 +88,8 @@ public class GameManager extends GameCore {
 
 	// Implement Score and Health Labels
 	gameScore = 0;
+	// Initialize counters
+	bTiming = 0;
 
     }
 
@@ -139,8 +148,11 @@ public class GameManager extends GameCore {
 
 	// Create new bullet
 	if(fire.isPressed()) {
-	    Bullet newBullet = new Bullet(player.getX(), player.getY(), 1);
-	    map.addBullet(newBullet);
+	    if(bTiming >= B_COOLDOWN) {
+	    	Bullet newBullet = new Bullet(player.getX(), player.getY()+30, 1);
+	    	map.addBullet(newBullet);
+		bTiming = 0;
+	    }
 	}
 
     }
@@ -279,6 +291,9 @@ public class GameManager extends GameCore {
             return;
         }
 
+	// Update timers
+	bTiming += elapsedTime;
+
         // get keyboard/mouse input
         checkInput(elapsedTime);
 
@@ -308,7 +323,7 @@ public class GameManager extends GameCore {
 	while (b.hasNext()) {
 		Bullet sprite = (Bullet)b.next();
 		sprite.update(elapsedTime);
-						////// TODO: Remove Bullets that leave the screen
+						////// TODO: Remove Bullets that travel a certain distance
 	}
 
     }
