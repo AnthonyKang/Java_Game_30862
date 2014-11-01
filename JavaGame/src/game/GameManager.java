@@ -80,7 +80,7 @@ public class GameManager extends GameCore {
         toggleDrumPlayback();
 
 	// Implement Score and Health Labels
-	score = 0;
+	gameScore = 0;
 
     }
 
