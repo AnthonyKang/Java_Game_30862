@@ -10,6 +10,8 @@ public class Bullet {
     // velocity (pixels per millisecond)
     private float dx;
     private float dy;
+    // Life time
+    private long life;
 
     public Bullet(float x, float y, int direction) { // -1 for left, 1 for right
         super();
@@ -17,6 +19,7 @@ public class Bullet {
 	this.y = y;
 	this.dx = direction * this.getMaxSpeed();
 	this.dy = 0;
+	life = 0;
     }
 
     // position setters and getters
@@ -40,6 +43,7 @@ public class Bullet {
     public void update(long elapsedTime) {
 	x += dx * elapsedTime;
 	y += dy * elapsedTime;
+	life += elapsedTime;
     }
 
     public float getMaxSpeed() {
@@ -50,4 +54,7 @@ public class Bullet {
         return true;
     }
 
+    public long getLife() {
+	return life;
+    }
 }

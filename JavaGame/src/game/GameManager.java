@@ -30,7 +30,8 @@ public class GameManager extends GameCore {
     private static final int DRUM_TRACK = 1;
 
     public static final float GRAVITY = 0.002f;
-    private static final long B_COOLDOWN = 100; // 1 second cooldown between shots
+    private static final long B_COOLDOWN = 100; // 0.1 second cooldown between shots
+    private static final long B_LIFESPAN = 400; // bullet survives for 0.4 seconds
 
     private Point pointCache = new Point();
     private TileMap map;
@@ -321,9 +322,11 @@ public class GameManager extends GameCore {
 	// Update bullets
 	Iterator b = map.getBullets();
 	while (b.hasNext()) {
-		Bullet sprite = (Bullet)b.next();
-		sprite.update(elapsedTime);
-						////// TODO: Remove Bullets that travel a certain distance
+		Bullet bullet = (Bullet)b.next();
+		bullet.update(elapsedTime);		
+				////// TODO: Remove Bullets that travel a certain distance
+		long life = bullet.getLife();
+		if(life > B_LIFESPAN) map.removeBullet(bullet);
 	}
 
     }
