@@ -56,6 +56,9 @@ public abstract class Creature extends Sprite {
 	return this.health;
     }
 
+    public void setHealth(int newHealth) {
+	this.health = newHealth;
+    }
 
     public Object clone() {
         // use reflection to create the correct subclass

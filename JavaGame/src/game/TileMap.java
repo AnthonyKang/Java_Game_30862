@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Iterator;
 import com.brackeen.javagamebook.tilegame.sprites.Bullet;
+import com.brackeen.javagamebook.tilegame.sprites.Creature;
 import com.brackeen.javagamebook.graphics.Sprite;
 
 /**
@@ -19,6 +20,7 @@ public class TileMap {
     private Sprite player;
 
     private LinkedList bullets;
+    private int gameScore;
 
     /**
         Creates a new TileMap with the specified width and
@@ -28,8 +30,17 @@ public class TileMap {
         tiles = new Image[width][height];
         sprites = new LinkedList();
 	bullets = new LinkedList();
+	gameScore = 0;
     }
 
+    // Game Score setters and getters
+    public void updateScore(int update) {
+	gameScore += update;
+    }
+
+    public int getScore() {
+	return this.gameScore;
+    }
 
     /**
         Gets the width of this TileMap (number of tiles across).
@@ -85,6 +96,7 @@ public class TileMap {
     */
     public void setPlayer(Sprite player) {
         this.player = player;
+	((Creature)player).setHealth(20);
     }
 
 

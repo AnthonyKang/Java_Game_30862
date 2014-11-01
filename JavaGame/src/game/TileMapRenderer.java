@@ -160,6 +160,14 @@ public class TileMapRenderer {
 	    Ellipse2D.Double circle = new Ellipse2D.Double(x, y, 10, 10);
 	    g.fill(circle);
 	}
+	
+	// draw health and score labels
+	g.setColor(Color.BLACK);
+	String healthString = "Health: " + ((Creature)player).getHealth();
+	g.drawString(healthString, 10, 50);
+	String scoreString = "Score: " + map.getScore();
+	g.drawString(scoreString, 200, 50);
+
     }
 
 }

@@ -176,6 +176,7 @@ public class ResourceManager {
         Sprite player = (Sprite)playerSprite.clone();
         player.setX(TileMapRenderer.tilesToPixels(3));
         player.setY(0);
+	((Creature)player).setHealth(20);
         newMap.setPlayer(player);
 
         return newMap;

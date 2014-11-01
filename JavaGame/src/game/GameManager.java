@@ -35,6 +35,8 @@ public class GameManager extends GameCore {
     private static final long FIRE_COOLDOWN = 1000; // 1 second cooldown after firing MAX B COUNT shots
     private static final long B_LIFESPAN = 400; // bullet survives for 0.4 seconds
     private static final int MAX_B_COUNT = 10;  // Number of bullets that can be fired continuously
+    private static final long P_HEALTH_UP_TIMER = 1000; // Every 1 second player is motionless, he gains health
+
 
     private Point pointCache = new Point();
     private TileMap map;
@@ -43,6 +45,8 @@ public class GameManager extends GameCore {
     private ResourceManager resourceManager;
     private Sound prizeSound;
     private Sound boopSound;
+    private Sound deathSound;
+    private Sound shotSound;
     private InputManager inputManager;
     private TileMapRenderer renderer;
 
@@ -53,13 +57,13 @@ public class GameManager extends GameCore {
     private GameAction fire;
 
 
-    private int gameScore;
-
     // Counters for timing and counting related functions
     private long bTiming;
     private int numShots;
     private long fireCooldownTiming;
-
+    private long playerHealthTimer;
+    private int playerMovePosition;
+    private Boolean playerIdle;
 
     public void init() {
         super.init();
@@ -83,6 +87,8 @@ public class GameManager extends GameCore {
         soundManager = new SoundManager(PLAYBACK_FORMAT);
         prizeSound = soundManager.getSound("sounds/prize.wav");
         boopSound = soundManager.getSound("sounds/boop2.wav");
+	deathSound = soundManager.getSound("sounds/death_sound.wav");
+	shotSound = soundManager.getSound("sounds/shot_sound.wav");
 
         // start music
         midiPlayer = new MidiPlayer();
@@ -91,14 +97,15 @@ public class GameManager extends GameCore {
         midiPlayer.play(sequence, true);
         toggleDrumPlayback();
 
-	// Implement Score and Health Labels
-	gameScore = 0;
 	// Initialize counters
+	((Creature)map.getPlayer()).setHealth(20);
 	bTiming = 0;
 	numShots = 0;
 	fireCooldownTiming = 0;
-
-    }
+	playerHealthTimer = 0;
+	playerMovePosition = TileMapRenderer.pixelsToTiles(map.getPlayer().getX());
+    	playerIdle = false;
+     }
 
 
     /**
@@ -141,25 +148,31 @@ public class GameManager extends GameCore {
         Player player = (Player)map.getPlayer();
         if (player.isAlive()) {
             float velocityX = 0;
+	    playerIdle = true;
             if (moveLeft.isPressed()) {
                 velocityX-=player.getMaxSpeed();
+		playerIdle = false;
             }
             if (moveRight.isPressed()) {
                 velocityX+=player.getMaxSpeed();
+		playerIdle = false;
             }
             if (jump.isPressed()) {
                 player.jump(false);
+		playerIdle = false;
             }
             player.setVelocityX(velocityX);
         }
 
 	// Create new bullet
 	if(fire.isPressed()) {
+	    playerIdle = false;
 	    if(bTiming >= B_COOLDOWN && numShots <= MAX_B_COUNT) {
 		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, 1);
 	    	map.addBullet(newBullet);
 		bTiming = 0;
 		numShots++;
+		soundManager.play(shotSound);
 	    }
 	}
 
@@ -296,11 +309,18 @@ public class GameManager extends GameCore {
         // player is dead! start map over
         if (player.getState() == Creature.STATE_DEAD) {
             map = resourceManager.reloadMap();
+	    playerMovePosition = 3;
             return;
         }
 
 	// Update timers
 	bTiming += elapsedTime;
+	if(playerIdle) {
+		playerHealthTimer += elapsedTime;
+	}
+	else {
+		playerHealthTimer = 0;
+	}
 
         // get keyboard/mouse input
         checkInput(elapsedTime);
@@ -308,6 +328,18 @@ public class GameManager extends GameCore {
         // update player
         updateCreature(player, elapsedTime);
         player.update(elapsedTime);
+
+	// Update health of player
+	if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
+		player.updateHealth(5);
+		playerHealthTimer -= P_HEALTH_UP_TIMER;
+	}
+	int new_player_position = TileMapRenderer.pixelsToTiles(player.getX());
+	if(new_player_position != playerMovePosition) {
+		player.updateHealth(Math.abs(new_player_position - playerMovePosition));
+		playerMovePosition = new_player_position;
+	}
+
 
         // update other sprites
         Iterator i = map.getSprites();
@@ -456,6 +488,7 @@ public class GameManager extends GameCore {
             }
             else {
                 // player dies!
+		soundManager.play(deathSound);
                 player.setState(Creature.STATE_DYING);
             }
         }
