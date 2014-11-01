@@ -42,7 +42,7 @@ public class Bullet {
     // Overwrite update function to not use animation
     public void update(long elapsedTime) {
 	x += dx * elapsedTime;
-	y += dy * elapsedTime;
+	// No need to change y
 	life += elapsedTime;
     }
 

@@ -3,6 +3,7 @@ package com.brackeen.javagamebook.tilegame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
@@ -30,8 +31,10 @@ public class GameManager extends GameCore {
     private static final int DRUM_TRACK = 1;
 
     public static final float GRAVITY = 0.002f;
-    private static final long B_COOLDOWN = 100; // 0.1 second cooldown between shots
+    private static final long B_COOLDOWN = 200; // 0.1 second cooldown between shots
+    private static final long FIRE_COOLDOWN = 1000; // 1 second cooldown after firing MAX B COUNT shots
     private static final long B_LIFESPAN = 400; // bullet survives for 0.4 seconds
+    private static final int MAX_B_COUNT = 10;  // Number of bullets that can be fired continuously
 
     private Point pointCache = new Point();
     private TileMap map;
@@ -52,9 +55,10 @@ public class GameManager extends GameCore {
 
     private int gameScore;
 
-
     // Counters for timing and counting related functions
     private long bTiming;
+    private int numShots;
+    private long fireCooldownTiming;
 
 
     public void init() {
@@ -91,6 +95,8 @@ public class GameManager extends GameCore {
 	gameScore = 0;
 	// Initialize counters
 	bTiming = 0;
+	numShots = 0;
+	fireCooldownTiming = 0;
 
     }
 
@@ -149,10 +155,11 @@ public class GameManager extends GameCore {
 
 	// Create new bullet
 	if(fire.isPressed()) {
-	    if(bTiming >= B_COOLDOWN) {
-	    	Bullet newBullet = new Bullet(player.getX(), player.getY()+30, 1);
+	    if(bTiming >= B_COOLDOWN && numShots <= MAX_B_COUNT) {
+		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, 1);
 	    	map.addBullet(newBullet);
 		bTiming = 0;
+		numShots++;
 	    }
 	}
 
@@ -321,14 +328,34 @@ public class GameManager extends GameCore {
 
 	// Update bullets
 	Iterator b = map.getBullets();
+	LinkedList BulletToRemove = new LinkedList();
 	while (b.hasNext()) {
 		Bullet bullet = (Bullet)b.next();
 		bullet.update(elapsedTime);		
-				////// TODO: Remove Bullets that travel a certain distance
+		
+		// Remove bullets that go past the bullet life span
 		long life = bullet.getLife();
-		if(life > B_LIFESPAN) map.removeBullet(bullet);
+		if(life > B_LIFESPAN) BulletToRemove.add(bullet);
+
+		// TODO: Detect bullet collision with tiles
+		else if(map.getTile(TileMapRenderer.pixelsToTiles(bullet.getX()), TileMapRenderer.pixelsToTiles(bullet.getY())) != null) BulletToRemove.add(bullet);
+
+	}
+	Iterator toRemove = BulletToRemove.iterator();
+	while (toRemove.hasNext()) {
+		Bullet remove = (Bullet)toRemove.next();
+		map.removeBullet(remove);
 	}
 
+	// Update cooldowns
+	// bullet firing cooldown
+	if(numShots >= MAX_B_COUNT) {
+		fireCooldownTiming += elapsedTime;
+		if(fireCooldownTiming >= FIRE_COOLDOWN) {
+			fireCooldownTiming = 0;
+			numShots = 0;
+		}
+	}
     }
 
 
