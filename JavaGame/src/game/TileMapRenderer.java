@@ -147,6 +147,17 @@ public class TileMapRenderer {
                 ((Creature)sprite).wakeUp();
             }
         }
+
+	// draw bullets
+	Iterator b = map.getBullets();
+	while (b.hasNext()) {
+	    Sprite sprite = (Sprite)i.next();
+	    int x = Math.round(sprite.getX()) + offsetX;
+	    int y = Math.round(sprite.getY()) + offsetY;
+	    // draw a circle
+	    g.setColor(Color.RED);
+	    Ellipse2D.Double circle = new Ellipse2D.Double(x, y, 10, 10);
+	    g.fill(circle);
     }
 
 }
