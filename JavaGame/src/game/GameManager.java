@@ -137,6 +137,12 @@ public class GameManager extends GameCore {
             player.setVelocityX(velocityX);
         }
 
+	// Create new bullet
+	if(fire.isPressed()) {
+	    Bullet newBullet = new Bullet(player.getX(), player.getY(), 1);
+	    map.addBullet(newBullet);
+	}
+
     }
 
 
@@ -296,6 +302,15 @@ public class GameManager extends GameCore {
             // normal update
             sprite.update(elapsedTime);
         }
+
+	// Update bullets
+	Iterator b = map.getBullets();
+	while (b.hasNext()) {
+		Bullet sprite = (Bullet)b.next();
+		sprite.update(elapsedTime);
+						////// TODO: Remove Bullets that leave the screen
+	}
+
     }
 
 

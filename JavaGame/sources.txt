@@ -5,6 +5,7 @@ src//game/sprites/Fly.java
 src//game/sprites/Grub.java
 src//game/sprites/Player.java
 src//game/sprites/PowerUp.java
+src//game/sprites/Bullet.java
 src//game/TileMap.java
 src//game/TileMapRenderer.java
 src//graphics/Animation.java

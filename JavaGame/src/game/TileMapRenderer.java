@@ -1,10 +1,11 @@
 package com.brackeen.javagamebook.tilegame;
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.Iterator;
 
 import com.brackeen.javagamebook.graphics.Sprite;
-import com.brackeen.javagamebook.tilegame.sprites.Creature;
+import com.brackeen.javagamebook.tilegame.sprites.*;
 
 /**
     The TileMapRenderer class draws a TileMap on the screen.
@@ -151,13 +152,14 @@ public class TileMapRenderer {
 	// draw bullets
 	Iterator b = map.getBullets();
 	while (b.hasNext()) {
-	    Sprite sprite = (Sprite)i.next();
+	    Bullet sprite = (Bullet)b.next();
 	    int x = Math.round(sprite.getX()) + offsetX;
 	    int y = Math.round(sprite.getY()) + offsetY;
 	    // draw a circle
 	    g.setColor(Color.RED);
 	    Ellipse2D.Double circle = new Ellipse2D.Double(x, y, 10, 10);
 	    g.fill(circle);
+	}
     }
 
 }

@@ -3,7 +3,7 @@ package com.brackeen.javagamebook.tilegame;
 import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Iterator;
-
+import com.brackeen.javagamebook.tilegame.sprites.Bullet;
 import com.brackeen.javagamebook.graphics.Sprite;
 
 /**
@@ -27,6 +27,7 @@ public class TileMap {
     public TileMap(int width, int height) {
         tiles = new Image[width][height];
         sprites = new LinkedList();
+	bullets = new LinkedList();
     }
 
 
@@ -94,7 +95,7 @@ public class TileMap {
         sprites.add(sprite);
     }
 
-    public void addBullet(Sprite sprite) {
+    public void addBullet(Bullet sprite) {
         bullets.add(sprite);
     }
 
@@ -105,7 +106,7 @@ public class TileMap {
         sprites.remove(sprite);
     }
 
-    public void removeBullet(Sprite sprite) {
+    public void removeBullet(Bullet sprite) {
 	bullets.remove(sprite);
     }
 
