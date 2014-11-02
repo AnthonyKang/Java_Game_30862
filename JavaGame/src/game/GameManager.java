@@ -31,7 +31,7 @@ public class GameManager extends GameCore {
     private static final int DRUM_TRACK = 1;
 
     public static final float GRAVITY = 0.002f;
-    private static final long B_COOLDOWN = 200; // 0.1 second cooldown between shots
+    private static final long B_COOLDOWN = 200; // 0.2 second cooldown between shots
     private static final long FIRE_COOLDOWN = 1000; // 1 second cooldown after firing MAX B COUNT shots
     private static final long B_LIFESPAN = 400; // bullet survives for 0.4 seconds
     private static final int MAX_B_COUNT = 10;  // Number of bullets that can be fired continuously
@@ -345,8 +345,8 @@ public class GameManager extends GameCore {
         Iterator i = map.getSprites();
         while (i.hasNext()) {
             Sprite sprite = (Sprite)i.next();
-            if (sprite instanceof Creature) {
-                Creature creature = (Creature)sprite;
+            if (sprite instanceof Grub) {
+                Grub creature = (Grub)sprite;
                 if (creature.getState() == Creature.STATE_DEAD) {
                     i.remove();
                 }
@@ -377,6 +377,42 @@ public class GameManager extends GameCore {
 	while (toRemove.hasNext()) {
 		Bullet remove = (Bullet)toRemove.next();
 		map.removeBullet(remove);
+	}
+	    
+	// update enemy bullets
+	Iterator eb = map.getEnemyBullets();
+	BulletToRemove = new LinkedList();
+	while (eb.hasNext()) {
+		Bullet bullet = (Bullet)eb.next();
+		bullet.update(elapsedTime);		
+		
+		// Remove bullets that go past the bullet life span
+		long life = bullet.getLife();
+		if(life > B_LIFESPAN) BulletToRemove.add(bullet);
+
+		// TODO: Detect bullet collision with tiles
+		else if(map.getTile(TileMapRenderer.pixelsToTiles(bullet.getX()), TileMapRenderer.pixelsToTiles(bullet.getY())) != null) BulletToRemove.add(bullet);
+
+	}
+	toRemove = BulletToRemove.iterator();
+	while (toRemove.hasNext()) {
+		Bullet remove = (Bullet)toRemove.next();
+		map.removeEnemyBullet(remove);
+	}
+
+	Iterator s = map.getSprites();
+	while(s.hasNext()) {
+	    Sprite newSprite = (Sprite)s.next();
+	    if(newSprite instanceof Grub) {
+		Grub sprite = (Grub)newSprite;
+		if(sprite.toFire()) {
+		    int direction = (sprite.getVelocityX() < 0) ? -1:1;
+		    Bullet newBullet = new Bullet(sprite.getX(), sprite.getY()+30, direction);
+	    	    map.addEnemyBullet(newBullet);
+		    //soundManager.play(shotSound);
+		    sprite.bulletFired();
+		}
+	    }
 	}
 
 	// Update cooldowns

@@ -142,10 +142,10 @@ public class TileMapRenderer {
             g.drawImage(sprite.getImage(), x, y, null);
 
             // wake up the creature when it's on screen
-            if (sprite instanceof Creature &&
+            if (sprite instanceof Grub &&
                 x >= 0 && x < screenWidth)
             {
-                ((Creature)sprite).wakeUp();
+                ((Grub)sprite).wakeUp();
             }
         }
 
@@ -160,6 +160,19 @@ public class TileMapRenderer {
 	    Ellipse2D.Double circle = new Ellipse2D.Double(x, y, 10, 10);
 	    g.fill(circle);
 	}
+
+	// draw enemy bullets
+	Iterator eb = map.getEnemyBullets();
+	while (eb.hasNext()) {
+	    Bullet sprite = (Bullet)eb.next();
+	    int x = Math.round(sprite.getX()) + offsetX;
+	    int y = Math.round(sprite.getY()) + offsetY;
+	    // draw a circle
+	    g.setColor(Color.BLACK);
+	    Ellipse2D.Double circle = new Ellipse2D.Double(x, y, 10, 10);
+	    g.fill(circle);
+	}
+	
 	
 	// draw health and score labels
 	g.setColor(Color.BLACK);
