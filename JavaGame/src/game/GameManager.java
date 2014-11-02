@@ -297,6 +297,24 @@ public class GameManager extends GameCore {
         return null;
     }
 
+    /** 
+	Check if any of the given bullets collides with the given sprite 
+    **/
+    public Bullet getHitSprite(Sprite sprite, Iterator b) {
+	while (b.hasNext()) {
+	    Bullet bullet = (Bullet)b.next();
+	    // check if the bullet lies within the boudaries
+	    float bulletX = bullet.getX();
+	    float bulletY = bullet.getY();
+	    float sX = sprite.getX();
+	    float sY = sprite.getY();
+	    if(bulletX > sX && bulletX < sX + sprite.getWidth() &&
+	       bulletY > sY && bulletY < sY + sprite.getHeight()) {
+		return bullet;
+	    }
+	}
+	return null;
+    }
 
     /**
         Updates Animation, position, and velocity of all Sprites
@@ -328,6 +346,9 @@ public class GameManager extends GameCore {
         // update player
         updateCreature(player, elapsedTime);
         player.update(elapsedTime);
+
+	// check player health
+	if(player.getHealth() <= 0) player.setState(Creature.STATE_DYING);
 
 	// Update health of player
 	if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
@@ -413,6 +434,29 @@ public class GameManager extends GameCore {
 		    sprite.bulletFired();
 		}
 	    }
+	}
+
+	// Collision detection for player and bullets
+	eb = map.getEnemyBullets();
+	Bullet hitPlayer = getHitSprite(player, eb);
+	if(hitPlayer != null) {
+		map.removeEnemyBullet(hitPlayer);
+		player.updateHealth(-5);
+	}
+
+	// Collision detection for enemies and player bullets
+	i = map.getSprites();
+	while(i.hasNext()) {
+		Sprite sprite = (Sprite)i.next();
+		if(sprite instanceof Grub) {
+			Grub enemy = (Grub) sprite;
+			b = map.getBullets();
+			Bullet hitEnemy = getHitSprite(enemy, b);
+			if(hitEnemy != null && enemy.isAlive()) {
+				map.removeBullet(hitEnemy);
+                		enemy.setState(Creature.STATE_DYING);
+			}
+		}
 	}
 
 	// Update cooldowns
