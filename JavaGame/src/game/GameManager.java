@@ -64,6 +64,7 @@ public class GameManager extends GameCore {
     private long playerHealthTimer;
     private int playerMovePosition;
     private Boolean playerIdle;
+    private int playerDir; // 1 for right, -1 for left
 
     public void init() {
         super.init();
@@ -105,6 +106,7 @@ public class GameManager extends GameCore {
 	playerHealthTimer = 0;
 	playerMovePosition = TileMapRenderer.pixelsToTiles(map.getPlayer().getX());
     	playerIdle = false;
+	playerDir = 1;
      }
 
 
@@ -152,10 +154,12 @@ public class GameManager extends GameCore {
             if (moveLeft.isPressed()) {
                 velocityX-=player.getMaxSpeed();
 		playerIdle = false;
+		playerDir = -1;
             }
             if (moveRight.isPressed()) {
                 velocityX+=player.getMaxSpeed();
-		playerIdle = false;
+		playerIdle = false;	
+		playerDir = 1;
             }
             if (jump.isPressed()) {
                 player.jump(false);
@@ -168,7 +172,7 @@ public class GameManager extends GameCore {
 	if(fire.isPressed()) {
 	    playerIdle = false;
 	    if(bTiming >= B_COOLDOWN && numShots <= MAX_B_COUNT) {
-		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, 1);
+		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, playerDir);
 	    	map.addBullet(newBullet);
 		bTiming = 0;
 		numShots++;
@@ -601,6 +605,11 @@ public class GameManager extends GameCore {
                 new EchoFilter(2000, .7f), false);
             map = resourceManager.loadNextMap();
         }
+	else if (powerUp instanceof PowerUp.Mushroom) {
+	    // Played health increases
+	    ((Creature)map.getPlayer()).updateHealth(5);
+	    soundManager.play(prizeSound);
+	}
     }
 
 }
