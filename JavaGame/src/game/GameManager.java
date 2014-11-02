@@ -137,7 +137,7 @@ public class GameManager extends GameCore {
         inputManager.mapToKey(moveRight, KeyEvent.VK_RIGHT);
         inputManager.mapToKey(jump, KeyEvent.VK_UP);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
-	inputManager.mapToKey(fire, KeyEvent.VK_SPACE);
+	inputManager.mapToKey(fire, KeyEvent.VK_S);
     }
 
 
