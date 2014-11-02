@@ -323,7 +323,6 @@ public class GameManager extends GameCore {
     public void update(long elapsedTime) {
         Creature player = (Creature)map.getPlayer();
 
-
         // player is dead! start map over
         if (player.getState() == Creature.STATE_DEAD) {
             map = resourceManager.reloadMap();
@@ -348,7 +347,11 @@ public class GameManager extends GameCore {
         player.update(elapsedTime);
 
 	// check player health
-	if(player.getHealth() <= 0) player.setState(Creature.STATE_DYING);
+	if(player.getHealth() <= 0 && player.isAlive()) {
+		player.setState(Creature.STATE_DYING);
+		soundManager.play(deathSound);
+	}
+
 
 	// Update health of player
 	if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
