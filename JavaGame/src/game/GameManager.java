@@ -462,6 +462,8 @@ public class GameManager extends GameCore {
 			if(hitEnemy != null && enemy.isAlive()) {
 				map.removeBullet(hitEnemy);
                 		enemy.setState(Creature.STATE_DYING);
+				map.updateScore(10);
+				player.updateHealth(10);
 			}
 		}
 	}
@@ -572,6 +574,8 @@ public class GameManager extends GameCore {
                 badguy.setState(Creature.STATE_DYING);
                 player.setY(badguy.getY() - player.getHeight());
                 player.jump(true);
+		map.updateScore(10);
+		player.updateHealth(10);
             }
             else {
                 // player dies!
