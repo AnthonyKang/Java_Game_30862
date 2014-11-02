@@ -8,10 +8,11 @@
 #   *       Goal
 #   1       Bad Guy 1 (grub)
 #   2       Bad Guy 2 (fly)
+#   m	    mushroom
                                                                  
                                                            o     o
                                                      o      o    o
-                       o o o        o o o       o     o      o 
+                       o m o        o o o       o     o      o 
                       IIIIIII      IIIIIII       o     o          
                                                   o         
                                                      EF

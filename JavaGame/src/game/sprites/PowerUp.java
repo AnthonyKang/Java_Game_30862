@@ -57,4 +57,13 @@ public abstract class PowerUp extends Sprite {
         }
     }
 
+    /** 
+	A mushroom powerup. Heals player
+    */
+    public static class Mushroom extends PowerUp{
+	public Mushroom(Animation anim){
+	    super(anim);
+	}
+    }
+
 }
