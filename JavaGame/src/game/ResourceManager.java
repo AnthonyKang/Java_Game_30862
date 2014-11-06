@@ -89,8 +89,8 @@ public class ResourceManager {
         while (map == null) {
             currentMap++;
             try {
-                map = loadMap(
-                    "maps/map" + currentMap + ".txt");
+                //map = loadMap("maps/map" + currentMap + ".txt");
+                map = loadMap("maps/map3.txt");
             }
             catch (IOException ex) {
                 if (currentMap == 1) {
@@ -108,8 +108,8 @@ public class ResourceManager {
 
     public TileMap reloadMap() {
         try {
-            return loadMap(
-                "maps/map" + currentMap + ".txt");
+            //return loadMap("maps/map" + currentMap + ".txt");
+            return loadMap("maps/map3.txt");
         }
         catch (IOException ex) {
             ex.printStackTrace();

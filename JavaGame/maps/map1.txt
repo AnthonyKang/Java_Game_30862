@@ -15,7 +15,7 @@
                        o m o        o o o       o     o      o 
                       IIIIIII      IIIIIII       o     o          
                                                   o         
-                                                     EF
-                 EF                                 EGD
-        EF  1    CD       1           1            EGAD     *
+                     1   1    1    1   11  1111 1      EF
+                 EF   1 1 1 1  1      11111111        EGD
+        EF  1    CD    1  1 1   11111111111111 111111EGAD     *
 BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB
