@@ -178,7 +178,7 @@ public class GameManager extends GameCore {
         }
 
 	// Create new bullet
-	if(fire.isPressed()) {
+	if(fire.isPressed() && player.isAlive()) {
 	    playerIdle = false;
 	    if(bTiming >= B_COOLDOWN && numShots <= MAX_B_COUNT) {
 		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, playerDir);
@@ -609,7 +609,9 @@ public class GameManager extends GameCore {
     */
     public void acquirePowerUp(PowerUp powerUp) {
         // remove it from the map
-        map.removeSprite(powerUp);
+        if(!(powerUp instanceof PowerUp.Gas)) {
+		map.removeSprite(powerUp);
+	}
 
         if (powerUp instanceof PowerUp.Star) {
             // do something here, like give the player points

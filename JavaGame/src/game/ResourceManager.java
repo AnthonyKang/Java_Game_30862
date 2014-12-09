@@ -28,6 +28,8 @@ public class ResourceManager {
     private Sprite goalSprite;
     private Sprite grubSprite;
     private Sprite mushSprite;
+    private Sprite explodeSprite;
+    private Sprite gasSprite;
 
     /**
         Creates a new ResourceManager with the specified
@@ -173,6 +175,13 @@ public class ResourceManager {
                 else if (ch == '1') {
                     addSprite(newMap, grubSprite, x, y);
                 }
+		else if (ch == 'e') {
+		    addSprite(newMap, explodeSprite, x, y);
+		    newMap.setTile(x, y, (Image)tiles.get(1));
+		}
+		else if (ch == 'g') {
+		    addSprite(newMap, gasSprite, x, y);
+		}
             }
         }
 
@@ -323,10 +332,15 @@ public class ResourceManager {
         anim.addFrame(loadImage("music2.png"), 150);
         musicSprite = new PowerUp.Music(anim);
 
-	//create "mushroom" sprite
+	// create "mushroom" sprite
 	anim = new Animation();
 	anim.addFrame(loadImage("mushroom.png"), 100);
 	mushSprite = new PowerUp.Mushroom(anim);
+
+	// create "gas" sprite
+	anim = new Animation();
+	anim.addFrame(loadImage("gas.png"), 100);
+	gasSprite = new PowerUp.Gas(anim);
     }
 
 }

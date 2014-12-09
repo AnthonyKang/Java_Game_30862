@@ -66,4 +66,16 @@ public abstract class PowerUp extends Sprite {
 	}
     }
 
+    public static class Explode extends PowerUp{
+	public Explode(Animation anim){
+		super(anim);
+	}
+    }
+
+    public static class Gas extends PowerUp{
+	public Gas(Animation anim){
+	    super(anim);
+	}
+    }
+
 }
