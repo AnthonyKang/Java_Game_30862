@@ -50,6 +50,7 @@ public abstract class Creature extends Sprite {
     public void updateHealth(int update) {
 	this.health += update;
 	if(this.health > MAX_HEALTH) this.health = MAX_HEALTH;
+ 	if(this.health < 0) this.health = 0;
     }
 
     public int getHealth() {

@@ -65,6 +65,11 @@ public class GameManager extends GameCore {
     private int playerMovePosition;
     private Boolean playerIdle;
     private int playerDir; // 1 for right, -1 for left
+    private Boolean playerInvc;
+    private long playerInvcTimer;
+    private int playerInvcMoveCount;
+
+
 
     public void init() {
         super.init();
@@ -107,6 +112,10 @@ public class GameManager extends GameCore {
 	playerMovePosition = TileMapRenderer.pixelsToTiles(map.getPlayer().getX());
     	playerIdle = false;
 	playerDir = 1;
+	playerInvc = false;
+	playerInvcTimer = 0;
+	playerInvcMoveCount = 0;
+
      }
 
 
@@ -342,6 +351,8 @@ public class GameManager extends GameCore {
 	else {
 		playerHealthTimer = 0;
 	}
+	if(playerInvc) playerInvcTimer += elapsedTime;
+
 
         // get keyboard/mouse input
         checkInput(elapsedTime);
@@ -356,6 +367,12 @@ public class GameManager extends GameCore {
 		soundManager.play(deathSound);
 	}
 
+	// Update invc status
+	if(playerInvc && (playerInvcTimer > 1000 || playerInvcMoveCount >= 10)) {
+		playerInvc = false;
+		playerInvcTimer = 0;
+		playerInvcMoveCount = 0;
+	}
 
 	// Update health of player
 	if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
@@ -366,6 +383,7 @@ public class GameManager extends GameCore {
 	if(new_player_position != playerMovePosition) {
 		player.updateHealth(Math.abs(new_player_position - playerMovePosition));
 		playerMovePosition = new_player_position;
+		if(playerInvc) playerInvcMoveCount += Math.abs(new_player_position-playerMovePosition);
 	}
 
 
@@ -437,7 +455,6 @@ public class GameManager extends GameCore {
 		    int direction = (sprite.getVelocityX() < 0) ? -1:1;
 		    Bullet newBullet = new Bullet(sprite.getX(), sprite.getY()+30, direction);
 	    	    map.addEnemyBullet(newBullet);
-		    //soundManager.play(shotSound);
 		    sprite.bulletFired();
 		}
 	    }
@@ -448,7 +465,7 @@ public class GameManager extends GameCore {
 	Bullet hitPlayer = getHitSprite(player, eb);
 	if(hitPlayer != null) {
 		map.removeEnemyBullet(hitPlayer);
-		player.updateHealth(-5);
+		if(!playerInvc) player.updateHealth(-5);
 	}
 
 	// Collision detection for enemies and player bullets
@@ -597,7 +614,8 @@ public class GameManager extends GameCore {
         if (powerUp instanceof PowerUp.Star) {
             // do something here, like give the player points
             soundManager.play(prizeSound);
-        }
+            playerInvc = true;
+	}
         else if (powerUp instanceof PowerUp.Music) {
             // change the music
             soundManager.play(prizeSound);
