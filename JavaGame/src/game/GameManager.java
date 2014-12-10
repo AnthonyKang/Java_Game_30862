@@ -69,7 +69,9 @@ public class GameManager extends GameCore {
     private long playerInvcTimer;
     private int playerInvcMoveCount;
 
-
+    private Boolean canShoot;
+    private int canShootMoveCount;
+    private long canShootTimer;
 
     public void init() {
         super.init();
@@ -115,7 +117,9 @@ public class GameManager extends GameCore {
 	playerInvc = false;
 	playerInvcTimer = 0;
 	playerInvcMoveCount = 0;
-
+	canShoot = true;
+	canShootMoveCount = 0;
+	canShootTimer = 0;
      }
 
 
@@ -178,7 +182,7 @@ public class GameManager extends GameCore {
         }
 
 	// Create new bullet
-	if(fire.isPressed() && player.isAlive()) {
+	if(fire.isPressed() && player.isAlive() && canShoot) {
 	    playerIdle = false;
 	    if(bTiming >= B_COOLDOWN && numShots <= MAX_B_COUNT) {
 		Bullet newBullet = new Bullet(player.getX(), player.getY()+30, playerDir);
@@ -352,7 +356,7 @@ public class GameManager extends GameCore {
 		playerHealthTimer = 0;
 	}
 	if(playerInvc) playerInvcTimer += elapsedTime;
-
+	if(!canShoot) canShootTimer += elapsedTime;
 
         // get keyboard/mouse input
         checkInput(elapsedTime);
@@ -367,13 +371,6 @@ public class GameManager extends GameCore {
 		soundManager.play(deathSound);
 	}
 
-	// Update invc status
-	if(playerInvc && (playerInvcTimer > 1000 || playerInvcMoveCount >= 10)) {
-		playerInvc = false;
-		playerInvcTimer = 0;
-		playerInvcMoveCount = 0;
-	}
-
 	// Update health of player
 	if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
 		player.updateHealth(5);
@@ -384,6 +381,19 @@ public class GameManager extends GameCore {
 		player.updateHealth(Math.abs(new_player_position - playerMovePosition));
 		playerMovePosition = new_player_position;
 		if(playerInvc) playerInvcMoveCount += Math.abs(new_player_position-playerMovePosition);
+		if(!canShoot) canShootMoveCount += Math.abs(new_player_position-playerMovePosition);
+	}
+
+	// Update abnormal status
+	if(playerInvc && (playerInvcTimer > 1000 || playerInvcMoveCount >= 10)) {
+		playerInvc = false;
+		playerInvcTimer = 0;
+		playerInvcMoveCount = 0;
+	}
+	if(!canShoot && (canShootTimer > 1000 || canShootMoveCount >= 10)) {
+		canShoot = true;
+		canShootTimer = 0;
+		canShootMoveCount = 0;
 	}
 
 
@@ -633,6 +643,14 @@ public class GameManager extends GameCore {
 	    // Played health increases
 	    ((Creature)map.getPlayer()).updateHealth(5);
 	    soundManager.play(prizeSound);
+	}
+	else if (powerUp instanceof PowerUp.Gas) {
+		canShoot = false;
+		canShootTimer = 0;
+		canShootMoveCount = 0;
+	}
+	else if (powerUp instanceof PowerUp.Explode) {
+		((Creature)map.getPlayer()).updateHealth(-10);
 	}
     }
 
