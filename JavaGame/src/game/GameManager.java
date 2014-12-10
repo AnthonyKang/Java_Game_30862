@@ -47,7 +47,7 @@ public class GameManager extends GameCore {
 	private Sound boopSound;
 	private Sound deathSound;
 	private Sound shotSound;
-	private Sound startSound;
+	private Sound starSound;
 	private Sound explodeSound;
 
 	private InputManager inputManager;
@@ -100,7 +100,7 @@ public class GameManager extends GameCore {
 		boopSound = soundManager.getSound("sounds/boop2.wav");
 		deathSound = soundManager.getSound("sounds/death_sound.wav");
 		shotSound = soundManager.getSound("sounds/shot_sound.wav");
-		startSound = soundManager.getSound("sounds/star.wav");
+		starSound = soundManager.getSound("sounds/star.wav");
 		explodeSound = soundManager.getSound("sounds.explode.wav");
 
 		// start music
