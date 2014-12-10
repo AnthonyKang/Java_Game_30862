@@ -176,8 +176,8 @@ public class ResourceManager {
                     addSprite(newMap, grubSprite, x, y);
                 }
 		else if (ch == 'e') {
+		    newMap.setTile(x, y, (Image)tiles.get(9));
 		    addSprite(newMap, explodeSprite, x, y);
-		    newMap.setTile(x, y, (Image)tiles.get(1));
 		}
 		else if (ch == 'g') {
 		    addSprite(newMap, gasSprite, x, y);
@@ -239,6 +239,7 @@ public class ResourceManager {
             tiles.add(loadImage(name));
             ch++;
         }
+	tiles.add(loadImage("exploded.png"));
     }
 
 
@@ -337,6 +338,11 @@ public class ResourceManager {
 	anim.addFrame(loadImage("mushroom.png"), 100);
 	mushSprite = new PowerUp.Mushroom(anim);
 
+	// create "explode" sprite
+	anim = new Animation();
+	anim.addFrame(loadImage("explode.png"), 100);
+	explodeSprite = new PowerUp.Explode(anim);
+	
 	// create "gas" sprite
 	anim = new Animation();
 	anim.addFrame(loadImage("gas.png"), 100);
