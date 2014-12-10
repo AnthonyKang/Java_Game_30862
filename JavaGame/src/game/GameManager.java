@@ -99,7 +99,7 @@ public class GameManager extends GameCore {
 		boopSound = soundManager.getSound("sounds/boop2.wav");
 		deathSound = soundManager.getSound("sounds/death_sound.wav");
 		shotSound = soundManager.getSound("sounds/shot_sound.wav");
-		explodeSound = soundManager.getSound("sounds.explode.wav");
+		//explodeSound = soundManager.getSound("sounds/explode.wav");
 
 		// start music
 		midiPlayer = new MidiPlayer();
@@ -607,7 +607,7 @@ public class GameManager extends GameCore {
 				map.updateScore(10);
 				player.updateHealth(10);
 			}
-			else {
+			else if(!playerInvc){
 				// player dies!
 				soundManager.play(deathSound);
 				player.setState(Creature.STATE_DYING);
