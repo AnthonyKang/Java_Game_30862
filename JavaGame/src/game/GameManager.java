@@ -47,7 +47,6 @@ public class GameManager extends GameCore {
 	private Sound boopSound;
 	private Sound deathSound;
 	private Sound shotSound;
-	private Sound starSound;
 	private Sound explodeSound;
 
 	private InputManager inputManager;
@@ -100,7 +99,6 @@ public class GameManager extends GameCore {
 		boopSound = soundManager.getSound("sounds/boop2.wav");
 		deathSound = soundManager.getSound("sounds/death_sound.wav");
 		shotSound = soundManager.getSound("sounds/shot_sound.wav");
-		starSound = soundManager.getSound("sounds/star.wav");
 		explodeSound = soundManager.getSound("sounds.explode.wav");
 
 		// start music
@@ -377,7 +375,7 @@ public class GameManager extends GameCore {
 		}
 
 		// Update health of player
-		if(playerHealthTimer >= P_HEALTH_UP_TIMER) {
+		if(playerHealthTimer >= P_HEALTH_UP_TIMER && player.isAlive()) {
 			player.updateHealth(5);
 			playerHealthTimer -= P_HEALTH_UP_TIMER;
 		}
@@ -630,7 +628,7 @@ public class GameManager extends GameCore {
 
 		if (powerUp instanceof PowerUp.Star) {
 			// do something here, like give the player points
-			soundManager.play(starSound);
+			soundManager.play(prizeSound);
 			playerInvc = true;
 		}
 		else if (powerUp instanceof PowerUp.Music) {
